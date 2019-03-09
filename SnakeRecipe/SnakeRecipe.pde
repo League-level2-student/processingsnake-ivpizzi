@@ -50,8 +50,8 @@ String direction = "up";
 int eaten = 1;
 
 // 8. Create and initialize foodX and foodY variables to hold the location of the food.
-int foodX = int(random(1, 500));
-int foodY = int(random(1, 500));
+int foodX = int(random(0, 49)) * 10;
+int foodY = int(random(0, 49)) * 10;
 
 // (Hint: use the random method to set both the x and y to random locations within the screen size (500 by 500).)
 
@@ -67,7 +67,7 @@ void setup()
 
 
   // 10. initialize your head to a new segment.
-  head = new Segment(251, 251);
+  head = new Segment(250, 250);
 
   // 11. Use the frameRate(int rate) method to set the rate to 20.
   frameRate(20);
@@ -115,10 +115,10 @@ void move() {
   switch(direction)
   {
   case "up":
-    head.setY(head.getY() + 10);
+    head.setY(head.getY() - 10);
     break;
   case "down":
-    head.setY(head.getY() - 10); 
+    head.setY(head.getY() + 10); 
     break;
   case "left":
     head.setX(head.getX() - 10); 
@@ -161,22 +161,22 @@ void keyPressed()
 
 void checkBoundaries()
 {
-  if(head.getX() > 500)
+  if(head.getX() > 490)
   {
-    head.setX(1);
+    head.setX(0);
   }
-  else if(head.getX() < 1)
+  else if(head.getX() < 0)
   {
-    head.setX(500);
+    head.setX(490);
   }
   
-  if(head.getY() > 500)
+  if(head.getY() > 490)
   {
-    head.setY(1);
+    head.setY(0);
   }
-  else if(head.getY() < 1)
+  else if(head.getY() < 0)
   {
-    head.setY(500);
+    head.setY(490);
   }
 }
 
@@ -187,12 +187,12 @@ void checkBoundaries()
 void collision()
 {
   // If the segment is colliding with a piece of food...
-  if(head.getX() == foodX)
+  if(head.getX() == foodX && head.getY() == foodY)
   {
     // Increase the amount of food eaten and set foodX and foodY to new random locations.
     eaten++;
-    foodX = int(random(1, 250));
-    foodY = int(random(1, 250));
+    foodX = int(random(0, 49)) * 10;
+    foodY = int(random(0, 49)) * 10;
   }
 }
 
@@ -226,16 +226,26 @@ void manageTail()
 
 void drawTail() {
     // Draw a 10 by 10 rectangle for each Segment in your snake ArrayList.
+    fill(255, 255, 255);
+    for(Segment s : tailSegments)
+    {
+      rect(s.getX(), s.getY(), 10, 10);
+    }
 }
 
 
 // 3. Complete the missing parts of the bodyCollision method below.
-
-void checkTailCollision() {
-
+void checkTailCollision()
+{
   // If your head has the same location as one of your segments...
-
   // reset your food variable
-
+  for(Segment s : tailSegments)
+  {
+    if(s.getX() == head.getX() && head.getY() == s.getY())
+    {
+      eaten = 1;
+    }
+  }
+  
   //Call this method at the beginning of your manageTail method.
 }
